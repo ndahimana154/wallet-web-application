@@ -6,7 +6,7 @@ const saveTransaction = async (data) => {
 }
 
 const findAllTransactions = async () => {
-    return Transaction.find().populate("account");
+    return Transaction.find().populate("account").sort({ createdAt: -1 })
 }
 
 export default {

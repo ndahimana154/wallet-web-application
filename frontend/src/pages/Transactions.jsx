@@ -141,48 +141,70 @@ const Transactions = () => {
                 <div>No transactions found.</div>
             ) : (
                 <>
-                    <table className="min-w-full bg-white shadow-md rounded-lg">
-                        <thead>
-                            <tr className="bg-blue-600 text-white">
-                                <th className="py-3 px-4 text-left">ID</th>
-                                <th className="py-3 px-4 text-left">Type</th>
-                                <th className="py-3 px-4 text-left">Account</th>
-                                <th className="py-3 px-4 text-left">Amount</th>
-                                <th className="py-3 px-4 text-left">Description</th>
-                                <th className="py-3 px-4 text-left">Category</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentTransactions.map((transaction, index) => (
-                                <tr key={index} className="border-b hover:bg-gray-100">
-                                    <td className="py-3 px-4">{index + 1}</td>
-                                    <td className="py-3 px-4">{transaction.type}</td>
-                                    <td className="py-3 px-4">{transaction.account.name}</td>
-                                    <td className="py-3 px-4">{transaction.amount.toLocaleString()} RWF</td>
-                                    <td className="py-3 px-4">{transaction.description}</td>
-                                    <td className="py-3 px-4">{transaction.category}</td>
+                    <div className="overflow-x-auto shadow-md rounded-lg mb-6">
+                        <table className="min-w-full bg-white shadow-md rounded-lg">
+                            <thead>
+                                <tr className="bg-blue-600 text-white">
+                                    <th className="py-3 px-4 text-left">ID</th>
+                                    <th className="py-3 px-4 text-left">Type</th>
+                                    <th className="py-3 px-4 text-left">Account</th>
+                                    <th className="py-3 px-4 text-left">Amount</th>
+                                    <th className="py-3 px-4 text-left">Old balance</th>
+                                    <th className="py-3 px-4 text-left">New Balance</th>
+                                    <th className="py-3 px-4 text-left">Description</th>
+                                    <th className="py-3 px-4 text-left">Category</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {currentTransactions.map((transaction, index) => (
+                                    <tr key={index} className="border-b hover:bg-gray-100">
+                                        <td className="py-3 px-4">{index + 1}</td>
+                                        <td className="py-3 px-4">{transaction.type}</td>
+                                        <td className="py-3 px-4">{transaction.account.name}</td>
+                                        <td className="py-3 px-4">
+                                            <span
+                                                className={`inline-block py-1 px-2 rounded-lg text-white font-bold ${transaction.type === "Deposit" ? "bg-green-500" : "bg-red-500"
+                                                    }`}
+                                            >
+                                                {transaction.type === "Deposit" ? `+${transaction.amount.toLocaleString()}` : `-${transaction.amount.toLocaleString()}`} RWF
+                                            </span>
+                                        </td>
+                                        <td className="py-3 px-4">{transaction.oldAccBalance.toLocaleString()}RWF</td>
+                                        <td className="py-3 px-4">{transaction.newAccBalance.toLocaleString()}RWF</td>
+                                        <td className="py-3 px-4">{transaction.description}</td>
+                                        <td className="py-3 px-4">{transaction.category}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <div className="flex justify-between items-center mt-4">
+                    <div className="flex justify-center items-center space-x-4 mb-6">
                         <button
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                             disabled={currentPage === 1}
-                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:bg-gray-200"
+                            className={`px-4 py-2 rounded-lg ${currentPage === 1
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-600 text-white hover:bg-blue-700"
+                                }`}
                         >
                             Previous
                         </button>
-                        <span className="px-4">Page {currentPage} of {totalPages}</span>
+                        <span className="text-gray-800">
+                            Page {currentPage} of {totalPages}
+                        </span>
                         <button
                             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                             disabled={currentPage === totalPages}
-                            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 disabled:bg-gray-200"
+                            className={`px-4 py-2 rounded-lg ${currentPage === totalPages
+                                ? "bg-gray-300 cursor-not-allowed"
+                                : "bg-blue-600 text-white hover:bg-blue-700"
+                                }`}
                         >
                             Next
                         </button>
                     </div>
+
                 </>
             )}
 
