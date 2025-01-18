@@ -2,6 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import DashboardLayout from './pages/DashboardLayout';
+import Accounts from './pages/Accounts';
+import NotFound from './pages/Notfound';
+import Transactions from './pages/Transactions';
+
 const validateToken = () => {
     const token = localStorage.getItem('token');
     const tokenTimestamp = localStorage.getItem('tokenTimestamp');
@@ -65,54 +70,57 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const AppRouter = () => {
-    const [profile, setProfile] = useState({
-        firstname: '',
-        lastname: '',
-        email: '',
-    });
+    // const [profile, setProfile] = useState({
+    //     firstname: '',
+    //     lastname: '',
+    //     email: '',
+    // });
 
 
-    const fetchProfile = async () => {
-        try {
-            const response = await userViewProfile();
-            if (response.status === 200) {
-                setProfile({
-                    firstname: response.data.firstName || '',
-                    lastname: response.data.lastName || '',
-                    email: response.data.email || '',
-                });
-            } else if (response.status === 401) {
-                localStorage.removeItem('token');
-            } else {
-                throw new Error(response.message || 'Error fetching profile');
-            }
-        } catch (error) {
-            addToast('error', error.message || 'Unknown error occurred', 3000);
-        }
-    };
+    // const fetchProfile = async () => {
+    //     try {
+    //         const response = await userViewProfile();
+    //         if (response.status === 200) {
+    //             setProfile({
+    //                 firstname: response.data.firstName || '',
+    //                 lastname: response.data.lastName || '',
+    //                 email: response.data.email || '',
+    //             });
+    //         } else if (response.status === 401) {
+    //             localStorage.removeItem('token');
+    //         } else {
+    //             throw new Error(response.message || 'Error fetching profile');
+    //         }
+    //     } catch (error) {
+    //         addToast('error', error.message || 'Unknown error occurred', 3000);
+    //     }
+    // };
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-            if (localStorage.getItem('token')) {
-                await fetchProfile();
-            }
-        };
-        fetchUserProfile();
-    }, []);
+    // useEffect(() => {
+    //     const fetchUserProfile = async () => {
+    //         if (localStorage.getItem('token')) {
+    //             await fetchProfile();
+    //         }
+    //     };
+    //     fetchUserProfile();
+    // }, []);
 
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            {/* <Route
-                path="/dashboard"
+            <Route
+                path="/user"
                 element={
                     <ProtectedRoute>
-                        <DashboardLayout profile={profile} />
+                        <DashboardLayout />
                     </ProtectedRoute>
                 }
             >
-            </Route> */}
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="accounts" element={<Accounts />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="*" element={<NotFound />} />
+            </Route>
         </Routes>
     );
 };

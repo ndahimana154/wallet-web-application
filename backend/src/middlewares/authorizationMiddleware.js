@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import authRepository from "../modules/auth/repository/authRepository.js";
+import authRepository from "../repository/authRepository.js";
 import { decodeToken } from "../helpers/authHelpers.js";
 
 

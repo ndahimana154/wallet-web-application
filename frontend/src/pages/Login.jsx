@@ -16,7 +16,8 @@ function WalletApp() {
             if (response.status === 200) {
                 toast.success("Login successful!", { position: "top-center" });
                 localStorage.setItem("token", response.token);
-                navigate("/dashboard")
+                localStorage.setItem("tokenTimestamp", Date.now());
+                navigate("/user/dashboard")
             } else {
                 toast.error(response.message || "Invalid credentials", {
                     position: "top-center",
